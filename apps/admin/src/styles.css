@@ -1,0 +1,148 @@
+:root {
+  --bg: #f6f3ef;
+  --panel: #ffffff;
+  --panel-2: #efe9e2;
+  --line: #e3dcd3;
+  --text: #201a15;
+  --muted: #8a7f74;
+  --accent: #c96f1e;
+  --accent-soft: #f3b46a;
+  --green: #0f9d6a;
+  --red: #d94848;
+  --blue: #2f6fed;
+  --radius: 16px;
+  --shadow: 0 4px 18px rgba(60, 42, 20, 0.08);
+}
+
+[data-theme="dark"] {
+  --bg: #12100e;
+  --panel: #1c1917;
+  --panel-2: #262220;
+  --line: #3a332e;
+  --text: #f5f0eb;
+  --muted: #a89f96;
+  --accent: #e8912d;
+  --accent-soft: #f3b46a;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); }
+body {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; border: none; }
+
+.app { max-width: 760px; margin: 0 auto; padding-bottom: 84px; }
+
+/* ---------- header ---------- */
+.header {
+  position: sticky; top: 0; z-index: 20;
+  background: var(--bg); padding: 14px 16px 8px;
+  border-bottom: 1px solid var(--line);
+}
+.header .row { display: flex; align-items: center; justify-content: space-between; }
+.header h1 { font-size: 20px; margin: 0; }
+.header .date { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+.icon-btn {
+  width: 38px; height: 38px; border-radius: 12px; background: var(--panel);
+  border: 1px solid var(--line); font-size: 17px;
+  position: relative;
+}
+.icon-btn .dot {
+  position: absolute; top: -4px; right: -4px; min-width: 17px; height: 17px;
+  background: var(--red); color: white; font-size: 10.5px; font-weight: 800;
+  border-radius: 999px; display: grid; place-items: center; padding: 0 4px;
+}
+
+/* ---------- cards ---------- */
+.card {
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 14px 16px; margin: 10px 12px; box-shadow: var(--shadow);
+}
+.card h3 { margin: 0 0 10px; font-size: 14px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.grid-2 .card { margin: 0; }
+
+.stat .lbl { color: var(--muted); font-size: 12.5px; font-weight: 600; }
+.stat .val { font-size: 24px; font-weight: 800; margin-top: 3px; letter-spacing: -0.5px; }
+.stat .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.stat .val.green { color: var(--green); }
+.stat .val.accent { color: var(--accent); }
+
+/* ---------- lists / tables ---------- */
+.list-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 11px 0; border-bottom: 1px solid var(--line); font-size: 14.5px;
+}
+.list-item:last-child { border-bottom: none; }
+.list-item .l { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.list-item .l .t { font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.list-item .l .s { color: var(--muted); font-size: 12px; }
+.list-item .r { font-weight: 700; white-space: nowrap; }
+.badge {
+  font-size: 10.5px; font-weight: 800; padding: 3px 8px; border-radius: 999px;
+  background: var(--panel-2); color: var(--muted); text-transform: uppercase; letter-spacing: 0.4px;
+}
+.badge.ok { background: rgba(15,157,106,0.14); color: var(--green); }
+.badge.warn { background: rgba(201,111,30,0.14); color: var(--accent); }
+.badge.bad { background: rgba(217,72,72,0.14); color: var(--red); }
+
+/* ---------- bar chart (pure CSS) ---------- */
+.bars { display: flex; align-items: flex-end; gap: 6px; height: 130px; padding-top: 6px; }
+.bars .bar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+.bars .bar {
+  width: 100%; border-radius: 6px 6px 2px 2px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-soft));
+  min-height: 3px;
+}
+.bars .bar-lbl { font-size: 10px; color: var(--muted); }
+
+/* ---------- bottom nav ---------- */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+  display: flex; justify-content: center;
+  background: var(--panel); border-top: 1px solid var(--line);
+  padding: 6px 8px calc(8px + env(safe-area-inset-bottom));
+}
+.bottom-nav .inner { display: flex; width: 100%; max-width: 560px; }
+.nav-btn {
+  flex: 1; background: none; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 7px 0; color: var(--muted); font-size: 10.5px; font-weight: 700; border-radius: 10px;
+}
+.nav-btn .ico { font-size: 21px; }
+.nav-btn.active { color: var(--accent); }
+
+/* ---------- login ---------- */
+.login-wrap { min-height: 100vh; display: grid; place-items: center; padding: 20px; }
+.login-card {
+  width: min(380px, 94vw); background: var(--panel); border: 1px solid var(--line);
+  border-radius: 20px; padding: 30px; box-shadow: var(--shadow);
+}
+.login-card .logo { font-size: 42px; text-align: center; }
+.login-card h1 { text-align: center; font-size: 22px; margin: 8px 0 2px; }
+.login-card .tag { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 20px; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 12.5px; color: var(--muted); font-weight: 700; margin-bottom: 5px; }
+.field input, .field select, .field textarea {
+  width: 100%; background: var(--panel-2); border: 1px solid var(--line);
+  color: var(--text); border-radius: 10px; padding: 12px; font-size: 15px; font-family: inherit;
+}
+.primary-btn {
+  width: 100%; padding: 14px 0; font-size: 16px; font-weight: 800;
+  background: var(--accent); color: #fff; border-radius: 12px; margin-top: 6px;
+}
+[data-theme="dark"] .primary-btn { color: #1a1208; }
+.err { background: rgba(217,72,72,0.12); color: var(--red); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; margin-bottom: 12px; }
+
+.section-title { margin: 18px 16px 0; font-size: 16px; font-weight: 800; }
+.empty { color: var(--muted); text-align: center; padding: 26px 0; font-size: 14px; }
+
+.seg { display: flex; gap: 6px; margin: 10px 12px 0; }
+.seg button {
+  flex: 1; padding: 9px 0; border-radius: 10px; font-weight: 700; font-size: 13px;
+  background: var(--panel); color: var(--muted); border: 1px solid var(--line);
+}
+.seg button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+[data-theme="dark"] .seg button.active { color: #1a1208; }

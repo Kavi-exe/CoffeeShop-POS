@@ -1,0 +1,19 @@
+{
+  "name": "coffeeshop-pos",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BrewBean Café POS — Hybrid Offline + Online Point of Sale",
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace=@brewbean/pos",
+    "dev:pos": "npm run dev --workspace=@brewbean/pos",
+    "dev:admin": "npm run dev --workspace=@brewbean/admin",
+    "dev:server": "npm run dev --workspace=@brewbean/server",
+    "dev:cloud": "npm run dev --workspace=@brewbean/cloud",
+    "build:shared": "npm run build --workspace=@brewbean/shared",
+    "build": "npm run build --workspaces --if-present"
+  }
+}

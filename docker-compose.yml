@@ -1,0 +1,74 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: brewbean
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-brewbean_dev}
+      POSTGRES_DB: brewbean_cloud
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U brewbean"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  server: # local POS server (source of truth in the café)
+    build: ./apps/server
+    environment:
+      PORT: "8080"
+      JWT_SECRET: ${JWT_SECRET:-dev-only-secret-change-me}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-dev-only-refresh-secret-change-me}
+      CLOUD_API_URL: http://cloud:8090
+      CLOUD_API_TOKEN: ${CLOUD_API_TOKEN:-dev-cloud-token}
+      CLOUD_DEVICE_ID: cafe-local-01
+      PRINT_SINK: file
+      PRINT_DIR: /data/print-jobs
+      DATA_DIR: /data
+    ports:
+      - "8080:8080"
+    volumes:
+      - serverdata:/data
+    depends_on:
+      cloud:
+        condition: service_started
+
+  cloud: # cloud API + Postgres
+    build: ./apps/cloud
+    environment:
+      PORT: "8090"
+      DATABASE_URL: postgres://brewbean:${POSTGRES_PASSWORD:-brewbean_dev}@postgres:5432/brewbean_cloud
+      JWT_SECRET: ${CLOUD_JWT_SECRET:-dev-cloud-jwt-secret}
+      CORS_ORIGINS: http://localhost:5174
+    ports:
+      - "8090:8090"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  pos:
+    build: ./apps/pos
+    environment:
+      VITE_API_URL: http://localhost:8080
+      VITE_WS_URL: ws://localhost:8080/ws
+    ports:
+      - "5173:5173"
+    depends_on:
+      - server
+
+  admin:
+    build: ./apps/admin
+    environment:
+      VITE_API_URL: http://localhost:8090
+    ports:
+      - "5174:55174"
+    depends_on:
+      - cloud
+
+volumes:
+  pgdata:
+  serverdata:
