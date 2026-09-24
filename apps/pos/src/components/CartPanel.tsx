@@ -55,7 +55,14 @@ export default function CartPanel({ onPay, onHold, onCancel }: { onPay(): void; 
       </div>
 
       <div className="cart-lines">
-        {cart.length === 0 && <div className="cart-empty">Tap products to add them<br />to this order</div>}
+        {cart.length === 0 && (
+          <div className="cart-empty">
+            <div style={{ fontSize: 44, marginBottom: 10, filter: "grayscale(0.2)", opacity: 0.85 }}>🧾</div>
+            <div style={{ fontWeight: 700, fontSize: 15.5, color: "var(--text)", opacity: 0.85 }}>New order</div>
+            Tap products to add them<br />
+            to this order
+          </div>
+        )}
         {cart.map((line) => {
           const p = products.find((x) => x.id === line.productId);
           const mods = (p?.modifierGroups ?? []).flatMap((g) => g.options).filter((o) => line.modifierOptionIds.includes(o.id));

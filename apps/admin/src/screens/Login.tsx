@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function Login({ onLogin }: { onLogin(): void }) {
-  const [email, setEmail] = useState("owner@brewbean.cafe");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
@@ -39,8 +39,8 @@ export default function Login({ onLogin }: { onLogin(): void }) {
         <div className="tag">Owner &amp; manager remote monitoring</div>
         {error && <div className="err">{error}</div>}
         <div className="field">
-          <label>Email</label>
-          <input autoFocus value={email} onChange={(e) => setEmail(e.target.value)} />
+          <label>Username</label>
+          <input autoFocus value={email} onChange={(e) => setEmail(e.target.value)} placeholder="owner" />
         </div>
         <div className="field">
           <label>Password</label>
@@ -50,6 +50,9 @@ export default function Login({ onLogin }: { onLogin(): void }) {
         <button className="primary-btn" onClick={submit} disabled={busy || !password}>
           {busy ? "Signing in…" : "Sign in"}
         </button>
+        <div className="login-hint">
+          Demo logins — owner/owner123 · manager/manager123 · cashier1/cashier123
+        </div>
       </div>
     </div>
   );

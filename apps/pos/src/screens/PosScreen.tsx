@@ -8,6 +8,7 @@ import PaymentModal from "../components/PaymentModal.js";
 import HoldModal from "../components/HoldModal.js";
 import DeliveryModal from "../components/DeliveryModal.js";
 import { syncNow } from "../lib/sync-manager.js";
+import { useTheme } from "../lib/theme.js";
 
 export default function PosScreen() {
   const session = usePos((s) => s.session)!;
@@ -21,16 +22,23 @@ export default function PosScreen() {
   const orderType = usePos((s) => s.orderType);
   const tableId = usePos((s) => s.tableId);
 
+  const [clock, setClock] = useState(() => new Date());
   const [activeCat, setActiveCat] = useState<string>("all");
   const [modifierFor, setModifierFor] = useState<Product | null>(null);
   const [payOpen, setPayOpen] = useState(false);
   const [holdOpen, setHoldOpen] = useState(false);
   const [deliveryOpen, setDeliveryOpen] = useState(false);
+  const { theme, toggle } = useTheme();
 
   useEffect(() => {
     const t = setInterval(() => void loadCatalog(), 30000);
     return () => clearInterval(t);
   }, [loadCatalog]);
+
+  useEffect(() => {
+    const t = setInterval(() => setClock(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
 
   useEffect(() => {
     if (orderType === "delivery") setDeliveryOpen(true);
@@ -69,7 +77,13 @@ export default function PosScreen() {
           {online ? "● Online" : "○ Offline"}
           {pendingCount > 0 && ` · ${pendingCount} queued`}
         </button>
+        <span className="chip clock-chip">
+          {clock.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} · {clock.toLocaleDateString([], { weekday: "short", day: "numeric", month: "short" })}
+        </span>
         <div className="spacer" />
+        <button className="chip" onClick={toggle} title="Toggle light/dark theme">
+          {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+        </button>
         <button className="chip held-chip" onClick={() => setHoldOpen(true)}>
           Held orders
         </button>
